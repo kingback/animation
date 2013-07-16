@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Animation</title>
+        <script src="animation.js"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font: 24px/1.5 "consola", "monaco", "tahoma", "arial";
+            }
+            ul {
+                list-style: none;
+            }
+            .box {
+                width: 100px;
+                height: 100px;
+                text-align: center;
+                line-height: 100px;
+                margin: 30px auto;
+                border-radius: 50px;
+                background: #ddd;
+                -webkit-backface-visibility: hidden;
+            }
+            .anim {
+                margin: 50px auto;
+                width: 680px;
+                height: 160px;
+                overflow: hidden;
+                border: 1px solid #999;
+            }
+            .list {
+                overflow: hidden;
+            }
+            ul {
+                float: left;
+                padding: 30px 30px 30px 0;
+            }
+            li {
+                width: 100px;
+                height: 100px;
+                line-height: 100px;
+                text-align: center;
+                float: left;
+                background: #ddd;
+                margin-left: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box">0</div>
+        <div class="anim">
+            <div class="list">
+                <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                    <li>5</li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            
+            function init() {
+                
+                // box circular
+                
+                var box = document.querySelector('.box');
+                
+                box.anim = new Animation('.box', {
+                    duration: 1.5,
+                    iteration: 'infinite',
+                    from: {
+                        'transform': 'rotate(0deg)'
+                    },
+                    to: {
+                        'transform': 'rotate(360deg)'
+                    },
+                    on: {
+                        start: function(e) {
+                            console.log('start');
+                            console.log(e);
+                        },
+                        end: function(e) {
+                            console.log('end');
+                            console.log(e);
+                        },
+                        iteration: function(e) {
+                            console.log('iteration');
+                            console.log(e);
+                        }
+                    }
+                });
+                
+                box.anim.play();
+                
+                box.addEventListener('mouseover', function() {
+                    box.anim.pause();    
+                }, false);
+                box.addEventListener('mouseout', function() {
+                    box.anim.resume();
+                }, false);
+                
+                // apple style
+                
+                var list = document.querySelector('ul'),
+                    items = document.querySelectorAll('li'),
+                    array = [];
+    
+                Animation.addKeyframe('apple', {
+                    'from': { 'transform': 'translate3d(3000px, 0, 0)' },
+                    '4%'  : { 'transform': 'translate3d(1697px, 0, 0)' },
+                    '8%'  : { 'transform': 'translate3d(1455px, 0, 0)' },
+                    '12%' : { 'transform': 'translate3d(1212px, 0, 0)' },
+                    '16%' : { 'transform': 'translate3d( 970px, 0, 0)' },
+                    '20%' : { 'transform': 'translate3d( 727px, 0, 0)' },
+                    '24%' : { 'transform': 'translate3d( 485px, 0, 0)' },
+                    '28%' : { 'transform': 'translate3d( 242px, 0, 0)' },
+                    '32%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '36%' : { 'transform': 'translate3d( -67px, 0, 0)' },
+                    '40%' : { 'transform': 'translate3d( -44px, 0, 0)' },
+                    '44%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '48%' : { 'transform': 'translate3d(  19px, 0, 0)' },
+                    '52%' : { 'transform': 'translate3d(  12px, 0, 0)' },
+                    '56%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '60%' : { 'transform': 'translate3d(  -6px, 0, 0)' },
+                    '64%' : { 'transform': 'translate3d(  -4px, 0, 0)' },
+                    '68%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '72%' : { 'transform': 'translate3d(   2px, 0, 0)' },
+                    '76%' : { 'transform': 'translate3d(   1px, 0, 0)' },
+                    '80%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '84%' : { 'transform': 'translate3d(  -1px, 0, 0)' },
+                    '88%' : { 'transform': 'translate3d(   0  , 0, 0)' },
+                    '92%' : { 'transform': 'translate3d(  -1px, 0, 0)' },
+                    'to'  : { 'transform': 'translate3d(   0  , 0, 0)' }
+                });
+                
+                array.forEach.call(items, function(item, index) {
+                    item.anim = new Animation(item, 'apple', {
+                        duration: '0.7',
+                        delay: 0.05 * (index + 1),
+                        on: {
+                            end: function() {
+                                if (index === items.length - 1) {
+                                    runApple();
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                function runApple() {
+                    setTimeout(function() {
+                        array.forEach.call(items, function(item) {
+                            item.anim.play();
+                        });
+                    }, 500);
+                }
+                
+                runApple();
+            
+            }
+            
+            if (Animation.support) {
+                init();
+            }
+        </script>
+    </body>
+</html>
